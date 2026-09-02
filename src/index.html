@@ -20,19 +20,38 @@
 
       <div id="main-wrapper">
           <aside id="library">
-              <h1>LIBRARY</h1>
+              <div class="section-header" id="library-header">
+                  <h2>LIBRARY</h2>
+                  <button class="action-button">+</button>
+              </div>
           </aside>
 
           <div class="resize-handle">
           </div>
 
           <section id="notes">
+              <div class="section-header">
+                  <h2>NOTES</h2>
+                  <button class="action-button">+</button>
+              </div>
+              <div class="search">
+                  <input type="text" id="search-term" placeholder="search">
+                  <button class="search-button"></button>
+              </div>
           </section>
 
           <div class="resize-handle">
           </div>
 
           <section id="wiki">
+              <div class="section-header">
+                  <h2>WIKI</h2>
+                  <button class="action-button">+</button>
+              </div>
+              <div class="search">
+                  <input type="text" id="search-term" placeholder="search">
+                  <button class="search-button"></button>
+              </div>
           </section>
       </div>
 
@@ -41,5 +60,7 @@
           document.getElementById("maximize").onclick = () => { window.windowAPI.maximize(); };
           document.getElementById("close").onclick = () => { window.windowAPI.close(); };
       </script>
+
+      <script src="main.js"></script>
   </body>
 </html>
