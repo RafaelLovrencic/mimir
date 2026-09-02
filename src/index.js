@@ -1,5 +1,7 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
+
+let mainWindow;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -8,9 +10,10 @@ if (require('electron-squirrel-startup')) {
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+  mainWindow = new BrowserWindow({
+    width: 1280, //1440
+    height: 720, //900
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -20,7 +23,7 @@ const createWindow = () => {
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -49,3 +52,21 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+ipcMain.on("window-minimize", () => {
+    mainWindow.minimize();
+});
+
+ipcMain.on("window-maximize", () => {
+    if (mainWindow.isMaximized()) {
+        mainWindow.unmaximize();
+    }
+
+    else {
+        mainWindow.maximize();
+    }
+});
+
+ipcMain.on("window-close", () => {
+    mainWindow.close();
+});

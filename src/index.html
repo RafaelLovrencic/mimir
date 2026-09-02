@@ -6,7 +6,39 @@
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+      <header>
+          <div id="mimir-logo">
+              <img src="../public/mimir-logo.svg" id="mimir-png" />
+              <h1>mimir</h1>
+          </div>
+          <div id="window-menu">
+              <button class="menu-button" id="minimize"> </button>
+              <button class="menu-button" id="maximize"> </button>
+              <button class="menu-button" id="close"> </button>
+          </div>
+      </header>
+
+      <div id="main-wrapper">
+          <aside id="library">
+          </aside>
+
+          <div class="resize-handle">
+          </div>
+
+          <section id="notes">
+          </section>
+
+          <div class="resize-handle">
+          </div>
+
+          <section id="wiki">
+          </section>
+      </div>
+
+      <script>
+          document.getElementById("minimize").onclick = () => { window.windowAPI.minimize(); };
+          document.getElementById("maximize").onclick = () => { window.windowAPI.maximize(); };
+          document.getElementById("close").onclick = () => { window.windowAPI.close(); };
+      </script>
   </body>
 </html>
