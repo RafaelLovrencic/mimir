@@ -209,10 +209,14 @@ header {
     margin: 10px 10px 10px 5px;
 }
 
-.section-header {
+.sticky-header-wrapper {
     position: sticky;
     top: 0;
     z-index: 10;
+    background-color: var(--background-color, white);
+}
+
+.section-header {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -221,14 +225,7 @@ header {
     padding: 0px 10px;
 }
 
-#library-header {
-    border-bottom: 1px solid var(--border-color);
-}
-
 .search {
-    position: sticky;
-    top: 0;
-    z-index: 10;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -243,6 +240,7 @@ input[type=text] {
     margin-right: 10px;
     font-family: "Inter";
     height: 20px;
+    min-width: 0;
     background-color: var(--main-bg-color);
     border: 1px solid var(--border-color);
     border-radius: 10px;
@@ -256,6 +254,7 @@ input[type=text] {
     outline: none;
     background-color: var(--titlebar-bg-color);
     font-size: 30px;
+    font-family: "Arimo";
     cursor: pointer;
 }
 
@@ -289,4 +288,52 @@ input[type=text] {
 
 .resize-handle:hover {
     background: var(--border-color);
+}
+
+
+.note-entry {
+    min-height: 10%; 
+    margin: 10px 10px 0px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; 
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.note-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.note-entry h4 {
+    margin: 0;
+}
+
+.page-num {
+    margin: 0;
+    text-align: right;
+}
+
+.note-content {
+    margin: 0;
+    width: 100%;
+}
+
+.book-entry {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    margin: 10px 10px 0px 10px;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.wiki-entry {
+    margin: 10px 10px 0px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
 }

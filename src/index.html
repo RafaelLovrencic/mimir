@@ -20,23 +20,45 @@
 
       <div id="main-wrapper">
           <aside id="library">
-              <div class="section-header" id="library-header">
-                  <h2>LIBRARY</h2>
-                  <button class="action-button">+</button>
+              <div class="sticky-header-wrapper">
+                  <div class="section-header">
+                      <h2>LIBRARY</h2>
+                      <button class="action-button">+</button>
+                  </div>
+                  <div class="search">
+                      <input type="text" id="search-term" placeholder="search">
+                      <button class="search-button"></button>
+                  </div>
               </div>
+
+              <h4 class="book-entry">BOOK TITLE</h4>
           </aside>
 
           <div class="resize-handle">
           </div>
 
           <section id="notes">
-              <div class="section-header">
-                  <h2>NOTES</h2>
-                  <button class="action-button">+</button>
+              <div class="sticky-header-wrapper">
+                  <div class="section-header">
+                      <h2>NOTES</h2>
+                      <button class="action-button">+</button>
+                  </div>
+                  <div class="search">
+                      <input type="text" id="search-term" placeholder="search">
+                      <button class="search-button"></button>
+                  </div>
               </div>
-              <div class="search">
-                  <input type="text" id="search-term" placeholder="search">
-                  <button class="search-button"></button>
+
+              <div class="note-entry">
+                  <div class="note-header">
+                      <h4>NOTE TITLE</h4>
+                      <p class="page-num">P.NUM</p>
+                  </div>
+                  <p class="note-content">Note content</p>
+                  <div class="note-buttons">
+                      <button class="action-button" style="display: inline-block;"></button>
+                      <button class="action-button" style="display: inline-block;"></button>
+                  </div>
               </div>
           </section>
 
@@ -44,13 +66,18 @@
           </div>
 
           <section id="wiki">
-              <div class="section-header">
-                  <h2>WIKI</h2>
-                  <button class="action-button">+</button>
+              <div class="sticky-header-wrapper">
+                  <div class="section-header">
+                      <h2>WIKI</h2>
+                      <button class="action-button">+</button>
+                  </div>
+                  <div class="search">
+                      <input type="text" id="search-term" placeholder="search">
+                      <button class="search-button"></button>
+                  </div>
               </div>
-              <div class="search">
-                  <input type="text" id="search-term" placeholder="search">
-                  <button class="search-button"></button>
+
+              <div class="wiki-entry">
               </div>
           </section>
       </div>
