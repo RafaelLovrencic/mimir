@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
+const { executeQuery } = require('./database');
 
 let mainWindow;
 
@@ -26,6 +27,12 @@ const createWindow = () => {
   // Open the DevTools.
   //mainWindow.webContents.openDevTools();
 };
+
+//DB queries from main.js:
+ipcMain.handle('db-query', async (event, action, args) => {
+    return executeQuery(action, args);
+});
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
