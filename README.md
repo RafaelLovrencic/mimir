@@ -11,4 +11,4 @@ Books can have multiple references to notes and wiki entries. Wiki entries can b
 
 This model is the foundation of mimir. Cross-referencing notes and wiki entries helps making a web of knowledge and reduces the sense of discontinuity that's often present with classical note-taking.
 
-![Database schema](docs/database-schema.png)
+![Database schema](docs/db-diagram.png)
