@@ -303,11 +303,15 @@ input[type=text] {
     padding: 10px;
 }
 
-.note-header {
+.entry-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+
+.entry-header h3 {
+    margin: 0;
 }
 
 .note-entry h4 {
@@ -328,8 +332,16 @@ input[type=text] {
     border: 1px solid var(--border-color);
     border-radius: 10px;
     margin: 10px 10px 0px 10px;
-    padding: 15px;
+    padding: 10px;
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.book-entry h4 {
+    margin: 0;
 }
 
 .wiki-entry {
