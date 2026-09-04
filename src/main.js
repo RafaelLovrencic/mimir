@@ -1,4 +1,5 @@
 let overlayShowing = false;
+let activeBook = null;
 
 function switchOverlay() {
     var overlay = document.querySelector("#overlay");
@@ -20,6 +21,7 @@ async function displayBooks() {
         const bookDiv = document.createElement('div');
         bookDiv.className = 'book-entry';
         bookDiv.id = `${book.id}`;
+        bookDiv.onclick = () => displayNotes(bookDiv.id);
         
         bookDiv.innerHTML = `
             <h4>${book.title}</h4>
@@ -28,6 +30,11 @@ async function displayBooks() {
         
         library.appendChild(bookDiv);
     });
+}
+
+async function displayNotes(bookID) {
+    activeBook = bookID;
+    console.log(bookID);
 }
 
 displayBooks();
