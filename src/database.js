@@ -103,10 +103,53 @@ const createDBQuery = `
 
 db.exec(createDBQuery);
 
+
+const addNote = db.transaction((bookID, title, body, pageNum) => {
+    const noteID = db.prepare(`
+        INSERT INTO note (title, body, page_num)
+        VALUES (?, ?, ?)
+    `)
+    .run(title, body, pageNum)
+    .lastInsertRowid;
+
+    db.prepare(`
+        INSERT INTO book_note (book_id, note_id)
+        VALUES (?, ?)
+    `)
+    .run(bookID, noteID);
+
+    return noteID;
+});
+
+const addWikiEntry = db.transaction((bookID, entryType, title, body) => {
+    const wikiEntryID = db.prepare(`
+        INSERT INTO wiki_entry (entry_type, title, body)
+        VALUES (?, ?, ?)
+    `)
+    .run(entryType, title, body)
+    .lastInsertRowid;
+
+    db.prepare(`
+        INSERT INTO book_wiki (book_id, wiki_id)
+        VALUES (?, ?)
+    `)
+    .run(bookID, wikiEntryID);
+
+    return wikiEntryID;
+});
+
 const queries = {
     'get-all-books': () => db.prepare('SELECT * FROM book').all(),
     'get-book-by-id': (id) => db.prepare('SELECT * FROM book WHERE id = ?').get(id),
-    'add-book': (name) => db.prepare('INSERT INTO book (title) VALUES (?)').run(name).lastInsertRowid,
+    'get-notes-by-book': (bookID) => db.prepare('SELECT note.* FROM note JOIN book_note ON note.id = book_note.note_id WHERE book_note.book_id = ?').all(bookID),
+
+    'add-book': (title, authorName, authorSurname, yearPublished) => {
+        return db.prepare('INSERT INTO book (title, author_name, author_surname, year_published) VALUES (?, ?, ?, ?)')
+          .run(title, authorName, authorSurname, yearPublished)
+          .lastInsertRowid;
+    },
+    'add-note': addNote,
+    'add-wiki-entry': addWikiEntry,
 };
 
 function executeQuery(action, args = []) {
