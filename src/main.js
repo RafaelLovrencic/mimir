@@ -12,10 +12,22 @@ function switchOverlay() {
     }
 }
 
-(async () => {
-    console.log("Testing SQLite connection on startup...");
-  
-    window.dbAPI.execute('add-book', "BOOKNAME");
+async function displayBooks() {
+    const library = document.querySelector('#library');
     const books = await window.dbAPI.execute('get-all-books');
-    console.log(books);
-})();
+
+    books.forEach(book => {
+        const bookDiv = document.createElement('div');
+        bookDiv.className = 'book-entry';
+        bookDiv.id = `${book.id}`;
+        
+        bookDiv.innerHTML = `
+            <h4>${book.title}</h4>
+            <button class="action-button" onclick="switchOverlay();"></button>
+        `;
+        
+        library.appendChild(bookDiv);
+    });
+}
+
+displayBooks();

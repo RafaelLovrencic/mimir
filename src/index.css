@@ -76,6 +76,7 @@
     --titlebar-bg-color: #d7ffd8;
     --border-color: #aaaaaa;
     --content-bg-color: #fdfdfd;
+    --gray-highlighted: #e0e0e0;
 }
 
 html, body {
@@ -338,6 +339,11 @@ input[type=text] {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    transition: background-color 0.5s ease;
+}
+
+.book-entry:hover {
+    background-color: var(--gray-highlighted);
 }
 
 .book-entry h4 {
