@@ -15,3 +15,7 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.send("window-close")
     }
 );
+
+contextBridge.exposeInMainWorld('dbAPI', {
+    execute: (action, ...args) => ipcRenderer.invoke('db-query', action, args)
+});

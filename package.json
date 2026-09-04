@@ -19,6 +19,7 @@
   },
   "license": "GPL3.0",
   "dependencies": {
+    "better-sqlite3": "^13.0.3",
     "electron-squirrel-startup": "^1.0.1"
   },
   "devDependencies": {
