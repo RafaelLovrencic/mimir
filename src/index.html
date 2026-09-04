@@ -5,7 +5,30 @@
     <title>Hello World!</title>
     <link rel="stylesheet" href="index.css" />
   </head>
+
   <body>
+
+      <div id="overlay">
+          <div>
+              <div class="form-elements-wrapper">
+                  <input type="text" id="title-input" placeholder="Enter title">
+                  <label for="entry-type">Entry type: </label>
+                      <select name="type" id="type">
+                          <option value="character">Character</option>
+                          <option value="place">Place</option>
+                          <option value="event">Event</option>
+                      </select>
+              </div>
+
+              <textarea rows="30" cols="60"></textarea>
+
+              <div class="form-elements-wrapper">
+                  <button class="form-button" onclick="switchOverlay();">SUBMIT</button>
+                  <button class="form-button" onclick="switchOverlay();">CANCEL</button>
+              </div>
+          </div>
+      </div>
+
       <header>
           <div id="mimir-logo">
               <img src="../public/mimir-logo.svg" id="mimir-png" />
@@ -23,7 +46,7 @@
               <div class="sticky-header-wrapper">
                   <div class="section-header">
                       <h2>LIBRARY</h2>
-                      <button class="action-button">+</button>
+                      <button class="action-button" onclick="switchOverlay();">+</button>
                   </div>
                   <div class="search">
                       <input type="text" id="search-term" placeholder="search">
@@ -33,7 +56,7 @@
 
               <div class="book-entry">
                   <h4>BOOK TITLE</h4>
-                  <button class="action-button"></button>
+                  <button class="action-button" onclick="switchOverlay();"></button>
               </div>
           </aside>
 
@@ -44,7 +67,7 @@
               <div class="sticky-header-wrapper">
                   <div class="section-header">
                       <h2>NOTES</h2>
-                      <button class="action-button">+</button>
+                      <button class="action-button" onclick="switchOverlay();">+</button>
                   </div>
                   <div class="search">
                       <input type="text" id="search-term" placeholder="search">
@@ -60,7 +83,7 @@
                   <p class="note-content">Note content</p>
                   <div class="note-buttons">
                       <button class="action-button" style="display: inline-block;"></button>
-                      <button class="action-button" style="display: inline-block;"></button>
+                      <button class="action-button" style="display: inline-block;" onclick="switchOverlay();"></button>
                   </div>
               </div>
           </section>
@@ -72,7 +95,7 @@
               <div class="sticky-header-wrapper">
                   <div class="section-header">
                       <h2>WIKI</h2>
-                      <button class="action-button">+</button>
+                      <button class="action-button" onclick="switchOverlay();">+</button>
                   </div>
                   <div class="search">
                       <input type="text" id="search-term" placeholder="search">
@@ -83,7 +106,7 @@
               <div class="wiki-entry">
                   <div class="entry-header">
                       <h3>ENTRY TITLE</h3>
-                      <button class="action-button"></button>
+                      <button class="action-button" onclick="switchOverlay();"></button>
                   </div>
                   <p>Entry text.</p>
               </div>
