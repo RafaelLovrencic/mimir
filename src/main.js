@@ -1,5 +1,6 @@
 let overlayShowing = false;
 let activeBook = null;
+const activeBookDisplay = document.querySelector('#active-book');
 
 function switchOverlay() {
     var overlay = document.querySelector("#overlay");
@@ -32,8 +33,14 @@ async function displayBooks() {
     });
 }
 
+async function addBook() {
+    window.dbAPI.execute('add-book', "NEWBOOK", "NAME", "SURNAME", 1989);
+}
+
 async function displayNotes(bookID) {
     activeBook = bookID;
+    const book = await window.dbAPI.execute('get-book-by-id', bookID);
+    activeBookDisplay.textContent = `${book.author_name} ${book.author_surname}: ${book.title}, ${book.year_published}`;
     console.log(bookID);
 }
 
