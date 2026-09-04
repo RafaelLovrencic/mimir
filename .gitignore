@@ -90,3 +90,7 @@ typings/
 
 # Electron-Forge
 out/
+
+#sqlite3 database
+database
+database/*

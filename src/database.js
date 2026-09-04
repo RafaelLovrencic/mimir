@@ -19,6 +19,7 @@ const createDBQuery = `
 
     CREATE TABLE IF NOT EXISTS wiki_entry (
         id INTEGER PRIMARY KEY,
+        entry_type TEXT,
         title TEXT NOT NULL,
         body TEXT
     );
