@@ -45,6 +45,24 @@ function showOverlay(formType) {
                 </div>`;
             break;
 
+        case "add-note":
+            overlay.innerHTML = `
+                <div>
+                    <div class="form-elements-wrapper">
+                        <input type="text" id="title-input" placeholder="Enter title">
+                        <p>Page number:</p>
+                        <input type="text" id="page-num-input" max-width:80px;">
+                    </div>
+
+                    <textarea rows="30" cols="60"></textarea>
+
+                    <div class="form-elements-wrapper">
+                        <button class="form-button" onclick="addNote();">SUBMIT</button>
+                        <button class="form-button" onclick="hideOverlay();">CANCEL</button>
+                    </div>
+                </div>`;
+            break;
+
         default:
             break;
     }
@@ -80,6 +98,33 @@ async function addBook() {
     displayBooks();
 }
 
+async function addNote() {
+    const titleInput = overlay.querySelector('#title-input');
+    const pageNumInput = overlay.querySelector('#page-num-input');
+    const bodyInput = overlay.querySelector('textarea');
+
+    const title = titleInput.value.trim();
+    const pageNum = pageNumInput.value.trim();
+    const body = bodyInput.value.trim();
+
+    if (!activeBookID) {
+        alert('Select a book to add a note.');
+        return;
+    }
+
+    if (!title || !body) {
+        alert('Please fill out all required fields before submitting.');
+        return; 
+    }
+
+    const newNoteID = await window.dbAPI.execute('add-note', parseInt(activeBookID), title, body, parseInt(pageNum));
+
+    hideOverlay();
+    const existingNotes = document.querySelector('#notes').querySelectorAll('.note-entry');
+    existingNotes.forEach(note => note.remove());
+    displayNotes(activeBookID);
+}
+
 async function displayBooks() {
     const library = document.querySelector('#library');
     const books = await window.dbAPI.execute('get-all-books');
@@ -100,10 +145,36 @@ async function displayBooks() {
 }
 
 async function displayNotes(bookID) {
+    const existingNotes = document.querySelector('#notes').querySelectorAll('.note-entry');
+    existingNotes.forEach(note => note.remove());
     activeBookID = bookID;
+
+    const noteArea = document.querySelector('#notes');
     const book = await window.dbAPI.execute('get-book-by-id', bookID);
     activeBookDisplay.textContent = `${book.author_name} ${book.author_surname}: ${book.title}, ${book.year_published}`;
-    console.log(bookID);
+
+    const notes = await window.dbAPI.execute('get-notes-by-book', parseInt(bookID));
+    console.log(notes);
+    notes.forEach(note => {
+        const noteDiv = document.createElement('div');
+        noteDiv.className = 'note-entry';
+        noteDiv.id = `${note.id}`;
+        
+        noteDiv.innerHTML = `
+            <div class="entry-header">
+                      <h4>${note.title}</h4>
+                      <p class="page-num">p${note.page_num}</p>
+            </div>
+            <p class="note-content">${note.body}</p>
+            <div class="note-buttons">
+                <button class="action-button" style="display: inline-block;"></button>
+                <button class="action-button" style="display: inline-block;" onclick="switchOverlay();"></button>
+            </div>        
+        `;
+        
+        noteArea.appendChild(noteDiv);
+        
+    });
 }
 
 displayBooks();

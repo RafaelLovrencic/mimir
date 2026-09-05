@@ -236,15 +236,29 @@ header {
     padding: 0px 10px 10px 10px;
 }
 
-input[type=text] {
+input[type=text].search-input {
     flex: 1;
     margin-right: 10px;
     font-family: "Inter";
+    font-size: 1em;
     height: 20px;
     min-width: 0;
     background-color: var(--main-bg-color);
     border: 1px solid var(--border-color);
     border-radius: 10px;
+}
+
+input[type=text] {
+    flex: 1;
+    margin-right: 10px;
+    font-family: "Inter";
+    font-size: 2em;
+    height: fit-content;
+    min-width: 0;
+    background-color: var(--main-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
 }
 
 .action-button {
@@ -395,6 +409,7 @@ input[type=text] {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: nowrap;
 }
 
