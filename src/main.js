@@ -51,7 +51,7 @@ function showOverlay(formType) {
                     <div class="form-elements-wrapper">
                         <input type="text" id="title-input" placeholder="Enter title">
                         <p>Page number:</p>
-                        <input type="text" id="page-num-input" max-width:80px;">
+                        <input type="text" id="page-num-input" style="max-width:80px;">
                     </div>
 
                     <textarea rows="30" cols="60"></textarea>
