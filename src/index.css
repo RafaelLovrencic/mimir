@@ -371,11 +371,12 @@ input[type=text] {
     cursor: pointer;
 }
 
-#overlay >  div {
+#overlay > div {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    min-width: 400px;
     background-color: var(--main-bg-color);
     border: 1px solid var(--border-color);
     border-radius: 15px;
@@ -384,6 +385,10 @@ input[type=text] {
     flex-wrap: nowrap;
     justify-content: space-between;
     padding: 15px;
+}
+
+#overlay > div > * {
+    margin: 15px;
 }
 
 .form-elements-wrapper {
@@ -404,6 +409,6 @@ input[type=text] {
     cursor: pointer;
 }
 
-textarea {
-    margin: 15px 0px;
+.form-button:hover {
+    filter: brightness(0.85);
 }

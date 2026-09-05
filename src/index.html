@@ -9,24 +9,6 @@
   <body>
 
       <div id="overlay">
-          <div>
-              <div class="form-elements-wrapper">
-                  <input type="text" id="title-input" placeholder="Enter title">
-                  <label for="entry-type">Entry type: </label>
-                      <select name="type" id="type">
-                          <option value="character">Character</option>
-                          <option value="place">Place</option>
-                          <option value="event">Event</option>
-                      </select>
-              </div>
-
-              <textarea rows="30" cols="60"></textarea>
-
-              <div class="form-elements-wrapper">
-                  <button class="form-button" onclick="switchOverlay();">SUBMIT</button>
-                  <button class="form-button" onclick="switchOverlay();">CANCEL</button>
-              </div>
-          </div>
       </div>
 
       <header>
@@ -47,7 +29,7 @@
               <div class="sticky-header-wrapper">
                   <div class="section-header">
                       <h2>LIBRARY</h2>
-                      <button class="action-button" onclick="switchOverlay();">+</button>
+                      <button class="action-button" onclick="showOverlay('add-book');">+</button>
                   </div>
                   <div class="search">
                       <input type="text" id="search-term" placeholder="search">
@@ -63,7 +45,7 @@
               <div class="sticky-header-wrapper">
                   <div class="section-header">
                       <h2>NOTES</h2>
-                      <button class="action-button" onclick="switchOverlay();">+</button>
+                      <button class="action-button" onclick="showOverlay('add-note);">+</button>
                   </div>
                   <div class="search">
                       <input type="text" id="search-term" placeholder="search">
@@ -91,7 +73,7 @@
               <div class="sticky-header-wrapper">
                   <div class="section-header">
                       <h2>WIKI</h2>
-                      <button class="action-button" onclick="switchOverlay();">+</button>
+                      <button class="action-button" onclick="showOverlay('add-wiki-entry');">+</button>
                   </div>
                   <div class="search">
                       <input type="text" id="search-term" placeholder="search">
