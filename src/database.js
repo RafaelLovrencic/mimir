@@ -138,6 +138,97 @@ const addWikiEntry = db.transaction((bookID, entryType, title, body) => {
     return wikiEntryID;
 });
 
+const updateBook = (bookID, title, authorName, authorSurname, yearPublished) => {
+    return db.prepare(`
+        UPDATE book
+        SET
+            title = ?,
+            author_name = ?,
+            author_surname = ?,
+            year_published = ?
+        WHERE id = ?
+    `)
+    .run(
+        title,
+        authorName,
+        authorSurname,
+        yearPublished,
+        bookID
+    );
+};
+
+const updateNote = (noteID, title, body, pageNum) => {
+    return db.prepare(`
+        UPDATE note
+        SET
+            title = ?,
+            body = ?,
+            page_num = ?
+        WHERE id = ?
+    `)
+    .run(
+        title,
+        body,
+        pageNum,
+        noteID
+    );
+};
+
+const updateWikiEntry = db.transaction((
+    wikiEntryID,
+    entryType,
+    title,
+    body,
+    bookIDs
+) => {
+    // update
+    db.prepare(`
+        UPDATE wiki_entry
+        SET
+            entry_type = ?,
+            title = ?,
+            body = ?
+        WHERE id = ?
+    `)
+    .run(entryType, title, body, wikiEntryID);
+
+    //get all references to books
+    const currentBookIDs = db.prepare(`
+        SELECT book_id
+        FROM book_wiki
+        WHERE wiki_id = ?
+    `)
+    .all(wikiEntryID)
+    .map(row => row.book_id);
+
+    //add new references
+    const addBookReference = db.prepare(`
+        INSERT INTO book_wiki (book_id, wiki_id)
+        VALUES (?, ?)
+    `);
+
+    for (const bookID of bookIDs) {
+        if (!currentBookIDs.includes(bookID)) {
+            addBookReference.run(bookID, wikiEntryID);
+        }
+    }
+
+    //delete unselected references
+    const removeBookReference = db.prepare(`
+        DELETE FROM book_wiki
+        WHERE book_id = ? AND wiki_id = ?
+    `);
+
+    for (const currentBookID of currentBookIDs) {
+        if (!bookIDs.includes(currentBookID)) {
+            removeBookReference.run(currentBookID, wikiEntryID);
+        }
+    }
+
+    return wikiEntryID;
+});
+
+
 const queries = {
     'get-all-books': () => db.prepare('SELECT * FROM book').all(),
     'get-book-by-id': (id) => db.prepare('SELECT * FROM book WHERE id = ?').get(id),
@@ -151,7 +242,12 @@ const queries = {
     },
     'add-note': addNote,
     'add-wiki-entry': addWikiEntry,
+
+    'update-book': updateBook,
+    'update-note': updateNote,
 };
+
+
 
 function executeQuery(action, args = []) {
     if (!queries[action]) {
@@ -159,5 +255,7 @@ function executeQuery(action, args = []) {
     }
     return queries[action](...args);
 }
+
+
 
 module.exports = { executeQuery };
