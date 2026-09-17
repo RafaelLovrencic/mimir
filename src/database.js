@@ -142,6 +142,7 @@ const queries = {
     'get-all-books': () => db.prepare('SELECT * FROM book').all(),
     'get-book-by-id': (id) => db.prepare('SELECT * FROM book WHERE id = ?').get(id),
     'get-notes-by-book': (bookID) => db.prepare('SELECT note.* FROM note JOIN book_note ON note.id = book_note.note_id WHERE book_note.book_id = ?').all(bookID),
+    'get-wiki-entry-by-id': (id) => db.prepare('SELECT * FROM wiki_entry WHERE id = ?').get(id),
 
     'add-book': (title, authorName, authorSurname, yearPublished) => {
         return db.prepare('INSERT INTO book (title, author_name, author_surname, year_published) VALUES (?, ?, ?, ?)')

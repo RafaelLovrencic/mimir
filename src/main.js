@@ -39,7 +39,7 @@ function showOverlay(formType) {
                     <textarea rows="30" cols="60"></textarea>
 
                     <div class="form-elements-wrapper">
-                        <button class="form-button" onclick="hideOverlay();">SUBMIT</button>
+                        <button class="form-button" onclick="addWikiEntry();">SUBMIT</button>
                         <button class="form-button" onclick="hideOverlay();">CANCEL</button>
                     </div>
                 </div>`;
@@ -74,31 +74,54 @@ function hideOverlay() {
 }
 
 
-async function addBook() {
+async function addWikiEntry() {
     const titleInput = overlay.querySelector('#title-input');
-    const authNameInput = overlay.querySelector('#auth-name-input');
-    const authSurnameInput = overlay.querySelector('#auth-surname-input');
-    const yearInput = overlay.querySelector('#year-input');
+    const typeInput = overlay.querySelector('#type');
+    const bodyInput = overlay.querySelector('textarea');
 
     const title = titleInput.value.trim();
-    const authorName = authNameInput.value.trim();
-    const authorSurname = authSurnameInput.value.trim();
-    const year = yearInput.value.trim();
+    const type = typeInput.value.trim();
+    const body = bodyInput.value.trim();
 
-    if (!title || !authorName || !authorSurname) {
+    if (!title) {
+        alert('Please enter a title.');
+        return; 
+    }
+
+    const newWikiEntryID = await window.dbAPI.execute('add-wiki-entry', activeBookID, type, title, body);
+
+    hideOverlay();
+    displayWikiEntry(newWikiEntryID);
+}
+
+async function addNote() {
+    const titleInput = overlay.querySelector('#title-input');
+    const pageNumInput = overlay.querySelector('#page-num-input');
+    const bodyInput = overlay.querySelector('textarea');
+
+    const title = titleInput.value.trim();
+    const pageNum = pageNumInput.value.trim();
+    const body = bodyInput.value.trim();
+
+    if (!activeBookID) {
+        alert('Select a book to add a note.');
+        return;
+    }
+
+    if (!title || !body) {
         alert('Please fill out all required fields before submitting.');
         return; 
     }
 
-    const newBookID = await window.dbAPI.execute('add-book', title, authorName, authorSurname, year);
+    const newNoteID = await window.dbAPI.execute('add-note', parseInt(activeBookID), title, body, parseInt(pageNum));
 
     hideOverlay();
-    const existingBooks = document.querySelector('#library').querySelectorAll('.book-entry');
-    existingBooks.forEach(book => book.remove());
-    displayBooks();
+    const existingNotes = document.querySelector('#notes').querySelectorAll('.note-entry');
+    existingNotes.forEach(note => note.remove());
+    displayNotes(activeBookID);
 }
 
-async function addNote() {
+async function addBook() {
     const titleInput = overlay.querySelector('#title-input');
     const pageNumInput = overlay.querySelector('#page-num-input');
     const bodyInput = overlay.querySelector('textarea');
@@ -175,6 +198,33 @@ async function displayNotes(bookID) {
         noteArea.appendChild(noteDiv);
         
     });
+}
+
+async function displayWikiEntry(wikiEntryID) {
+    const currentWikiEntry = document.querySelector('#wiki').querySelector('.wiki-entry');
+    try {
+        currentWikiEntry.remove();
+    } catch (err) {
+        console.log(err);
+    }
+
+    const wikiArea = document.querySelector('#wiki');
+    const wikiEntry = await window.dbAPI.execute('get-wiki-entry-by-id', parseInt(wikiEntryID));
+
+    const wikiDiv = document.createElement('div');
+    wikiDiv.className = 'wiki-entry';
+    wikiDiv.id = `${wikiEntry.id}`;
+    
+    wikiDiv.innerHTML = `
+        <div class="entry-header">
+            <h3>${wikiEntry.title}</h3>
+            <button class="action-button" onclick="switchOverlay();"></button>
+        </div>
+        <p>${wikiEntry.body}</p>
+    `;
+    
+    wikiArea.appendChild(wikiDiv);
+
 }
 
 displayBooks();
