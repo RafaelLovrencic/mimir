@@ -228,6 +228,24 @@ const updateWikiEntry = db.transaction((
     return wikiEntryID;
 });
 
+const deleteBook = db.transaction((bookID) => {
+
+    db.prepare(`
+        DELETE FROM note
+        WHERE id IN (
+            SELECT note_id
+            FROM book_note
+            WHERE book_id = ?
+        )
+    `).run(bookID);
+
+    db.prepare(`
+        DELETE FROM book
+        WHERE id = ?
+    `).run(bookID);
+
+});
+
 
 const queries = {
     'get-all-books': () => db.prepare('SELECT * FROM book').all(),
@@ -247,7 +265,7 @@ const queries = {
     'update-note': updateNote,
     'update-wiki-entry': updateWikiEntry,
 
-    'delete-book': (id) => db.prepare('DELETE FROM book WHERE id = ?').run(id),
+    'delete-book': deleteBook,
     'delete-note': (id) => db.prepare('DELETE FROM note WHERE id = ?').run(id),
     'delete-wiki-entry': (id) => db.prepare('DELETE FROM wiki_entry WHERE id = ?').run(id),
 };

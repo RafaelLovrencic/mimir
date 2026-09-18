@@ -23,8 +23,11 @@ function showOverlay(formType, data = null) {
 
                     <div class="form-elements-wrapper">
                         <button class="form-button" id="submit" onclick="submitBook();">SUBMIT</button>
-                        <button class="form-button" id="delete" onclick="submitBook();">DELETE</button>
-                        <button class="form-button" onclick="hideOverlay();">CANCEL</button>
+                        ${data !== null
+                            ? `<button class="form-button" onclick="deleteItem('book', ${data['id']})" id="delete">DELETE</button>`
+                            : ''
+                        }
+                    <button class="form-button" onclick="hideOverlay();">CANCEL</button>
                     </div>
                 </div>
             `;
@@ -57,7 +60,10 @@ function showOverlay(formType, data = null) {
 
                     <div class="form-elements-wrapper">
                         <button class="form-button" id="submit" onclick="submitWikiEntry();">SUBMIT</button>
-                        <button class="form-button" id="delete" onclick="submitBook();">DELETE</button>
+                        ${data !== null
+                            ? `<button class="form-button" onclick="deleteItem('wikiEntry', ${data['id']})" id="delete">DELETE</button>`
+                            : ''
+                        }
                         <button class="form-button" onclick="hideOverlay();">CANCEL</button>
                     </div>
                 </div>`;
@@ -85,7 +91,10 @@ function showOverlay(formType, data = null) {
 
                     <div class="form-elements-wrapper">
                         <button class="form-button" id="submit" onclick="submitNote();">SUBMIT</button>
-                        <button class="form-button" id="delete" onclick="submitBook();">DELETE</button>
+                        ${data !== null
+                            ? `<button class="form-button" onclick="deleteItem('note', ${data['id']})" id="delete">DELETE</button>`
+                            : ''
+                        }
                         <button class="form-button" onclick="hideOverlay();">CANCEL</button>
                     </div>
                 </div>`;
@@ -279,7 +288,7 @@ async function displayBooks() {
                          'title': '${book.title}',
                          'authName': '${book.author_name}',
                          'authSurname': '${book.author_surname}',
-                         'year': parseInt(${book.year_published})}
+                         'year': '${book.year_published}'}
                     );
                 "></button>
         `;
@@ -364,6 +373,39 @@ async function displayWikiEntry(wikiEntryID) {
     
     wikiArea.appendChild(wikiDiv);
 
+}
+
+function deleteItem(itemType, id) {
+    switch (itemType) {
+        case 'book':
+            window.dbAPI.execute('delete-book', id);
+            document.querySelector('#library').querySelector(`[id="${id}"]`).remove();
+            document.querySelector('#notes')
+                .querySelectorAll('.note-entry')
+                .forEach(note => note.remove());
+
+            activeBookDisplay.textContent = ``;
+            activeBookID = null;
+            
+            break;
+
+        case 'wikiEntry':
+            window.dbAPI.execute('delete-wiki-entry', id);
+            document.querySelector('#wiki').querySelector(`[id="${id}"]`).remove();
+
+            break;
+
+        case 'note':
+            window.dbAPI.execute('delete-note', id);
+            document.querySelector('#notes').querySelector(`[id="${id}"]`).remove();
+
+            break;
+
+        default:
+            break;
+    }
+
+    hideOverlay();
 }
 
 displayBooks();
