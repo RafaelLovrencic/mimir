@@ -23,6 +23,7 @@ function showOverlay(formType, data = null) {
 
                     <div class="form-elements-wrapper">
                         <button class="form-button" id="submit" onclick="submitBook();">SUBMIT</button>
+                        <button class="form-button" id="delete" onclick="submitBook();">DELETE</button>
                         <button class="form-button" onclick="hideOverlay();">CANCEL</button>
                     </div>
                 </div>
@@ -56,6 +57,7 @@ function showOverlay(formType, data = null) {
 
                     <div class="form-elements-wrapper">
                         <button class="form-button" id="submit" onclick="submitWikiEntry();">SUBMIT</button>
+                        <button class="form-button" id="delete" onclick="submitBook();">DELETE</button>
                         <button class="form-button" onclick="hideOverlay();">CANCEL</button>
                     </div>
                 </div>`;
@@ -83,6 +85,7 @@ function showOverlay(formType, data = null) {
 
                     <div class="form-elements-wrapper">
                         <button class="form-button" id="submit" onclick="submitNote();">SUBMIT</button>
+                        <button class="form-button" id="delete" onclick="submitBook();">DELETE</button>
                         <button class="form-button" onclick="hideOverlay();">CANCEL</button>
                     </div>
                 </div>`;

@@ -246,6 +246,10 @@ const queries = {
     'update-book': updateBook,
     'update-note': updateNote,
     'update-wiki-entry': updateWikiEntry,
+
+    'delete-book': (id) => db.prepare('DELETE FROM book WHERE id = ?').run(id),
+    'delete-note': (id) => db.prepare('DELETE FROM note WHERE id = ?').run(id),
+    'delete-wiki-entry': (id) => db.prepare('DELETE FROM wiki_entry WHERE id = ?').run(id),
 };
 
 

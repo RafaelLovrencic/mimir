@@ -340,7 +340,12 @@ input[type=text] {
 
 .note-content {
     margin: 0;
-    width: 100%;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
 }
 
 .book-entry {
