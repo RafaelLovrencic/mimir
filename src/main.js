@@ -1,11 +1,16 @@
 let activeBookID = null;
 let editing = false;
+
 const activeBookDisplay = document.querySelector('#active-book');
 const overlay = document.querySelector('#overlay');
 
 
 function showOverlay(formType, data = null) {
     overlay.style.display = "block";
+
+    editingData = data;
+    editing = data !== null;
+
     
     switch (formType) {
         case "book":
@@ -17,7 +22,7 @@ function showOverlay(formType, data = null) {
                     <input type="text" id="year-input" placeholder="Edition publishing year">
 
                     <div class="form-elements-wrapper">
-                        <button class="form-button" onclick="submitBook();">SUBMIT</button>
+                        <button class="form-button" id="submit" onclick="submitBook();">SUBMIT</button>
                         <button class="form-button" onclick="hideOverlay();">CANCEL</button>
                     </div>
                 </div>
@@ -29,8 +34,7 @@ function showOverlay(formType, data = null) {
                 overlay.querySelector('#auth-name-input').value = data['authName'];
                 overlay.querySelector('#auth-surname-input').value = data['authSurname'];
                 overlay.querySelector('#year-input').value = data['year'];
-            } else {
-                editing = false;
+                overlay.querySelector('#submit').onclick = () => submitBook(data['id']);
             }
 
             break;
@@ -51,7 +55,7 @@ function showOverlay(formType, data = null) {
                     <textarea rows="30" cols="60"></textarea>
 
                     <div class="form-elements-wrapper">
-                        <button class="form-button" onclick="submitWikiEntry();">SUBMIT</button>
+                        <button class="form-button" id="submit" onclick="submitWikiEntry();">SUBMIT</button>
                         <button class="form-button" onclick="hideOverlay();">CANCEL</button>
                     </div>
                 </div>`;
@@ -61,10 +65,8 @@ function showOverlay(formType, data = null) {
                 overlay.querySelector('#title-input').value = data['title'];
                 overlay.querySelector('#type').value = data['type'];
                 overlay.querySelector('textarea').value = data['body'];
-            } else {
-                editing = false;
+                overlay.querySelector('#submit').onclick = () => submitWikiEntry(data['id']);
             }
-
 
             break;
 
@@ -80,7 +82,7 @@ function showOverlay(formType, data = null) {
                     <textarea rows="30" cols="60"></textarea>
 
                     <div class="form-elements-wrapper">
-                        <button class="form-button" onclick="submitNote();">SUBMIT</button>
+                        <button class="form-button" id="submit" onclick="submitNote();">SUBMIT</button>
                         <button class="form-button" onclick="hideOverlay();">CANCEL</button>
                     </div>
                 </div>`;
@@ -90,10 +92,8 @@ function showOverlay(formType, data = null) {
                 overlay.querySelector('#title-input').value = data['title'];
                 overlay.querySelector('#page-num-input').value = data['pageNum'];
                 overlay.querySelector('textarea').value = data['body'];
-            } else {
-                editing = false;
+                overlay.querySelector('#submit').onclick = () => submitNote(data['id']);
             }
-
 
             break;
 
@@ -108,7 +108,7 @@ function hideOverlay() {
 }
 
 
-async function submitWikiEntry() {
+async function submitWikiEntry(id = null) {
     const titleInput = overlay.querySelector('#title-input');
     const typeInput = overlay.querySelector('#type');
     const bodyInput = overlay.querySelector('textarea');
@@ -123,17 +123,24 @@ async function submitWikiEntry() {
     }
 
     if (editing) {
-        console.log("ADD EDITING FUNCS");
-        return;
+        await window.dbAPI.execute('update-wiki-entry',
+            parseInt(id),
+            type,
+            title,
+            body,
+            [] //book IDs
+        );
+
+        displayWikiEntry(id);
+    } else {
+        const newWikiEntryID = await window.dbAPI.execute('add-wiki-entry', activeBookID, type, title, body);
+        displayWikiEntry(newWikiEntryID);
     }
 
-    const newWikiEntryID = await window.dbAPI.execute('add-wiki-entry', activeBookID, type, title, body);
-
     hideOverlay();
-    displayWikiEntry(newWikiEntryID);
 }
 
-async function submitNote() {
+async function submitNote(id = null) {
     const titleInput = overlay.querySelector('#title-input');
     const pageNumInput = overlay.querySelector('#page-num-input');
     const bodyInput = overlay.querySelector('textarea');
@@ -153,7 +160,36 @@ async function submitNote() {
     }
 
     if (editing) {
-        console.log("ADD EDITING FUNCS");
+        await window.dbAPI.execute('update-note',
+            id,
+            title,
+            body,
+            pageNum,
+        );
+
+        hideOverlay();
+        var noteDiv = document.querySelector('#notes').querySelector(`[id="${id}"]`);
+        noteDiv.innerHTML = `
+            <div class="entry-header">
+                      <h4>${title}</h4>
+                      <p class="page-num">p${pageNum}</p>
+            </div>
+            <p class="note-content">${body}</p>
+            <div class="note-buttons">
+                <button class="action-button" style="display: inline-block;"></button>
+                <button class="action-button" style="display: inline-block;"
+                    onclick="
+                        event.stopPropagation();
+                        showOverlay('note',
+                            {'id': ${id},
+                             'title': '${title}',
+                             'pageNum': '${pageNum}',
+                             'body': '${body}'}
+                        );
+                    "></button>
+            </div>        
+        `;
+        
         return;
     }
 
@@ -165,7 +201,7 @@ async function submitNote() {
     displayNotes(activeBookID);
 }
 
-async function submitBook() {
+async function submitBook(id = null) {
     const titleInput = overlay.querySelector('#title-input');
     const authNameInput = overlay.querySelector('#auth-name-input');
     const authSurnameInput = overlay.querySelector('#auth-surname-input');
@@ -182,7 +218,33 @@ async function submitBook() {
     }
 
     if (editing) {
-        console.log("ADD EDITING FUNCS");
+        await window.dbAPI.execute('update-book',
+            id,
+            title,
+            authorName,
+            authorSurname,
+            year
+        );
+
+        hideOverlay();
+
+        var bookDiv = document.querySelector('#library').querySelector(`[id="${id}"]`);
+        activeBookDisplay.textContent = `${authorName} ${authorSurname}: ${title}, ${year}`;
+        bookDiv.innerHTML = `
+            <h4>${title}</h4>
+            <button class="action-button"
+                onclick="
+                    event.stopPropagation();
+                    showOverlay('book',
+                        {'id': ${id},
+                         'title': '${title}',
+                         'authName': '${authorName}',
+                         'authSurname': '${authorSurname}',
+                         'year': parseInt(${year})}
+                    );
+                "></button>
+        `;
+
         return;
     }
 
@@ -210,7 +272,7 @@ async function displayBooks() {
                 onclick="
                     event.stopPropagation();
                     showOverlay('book',
-                        {'id': parseInt(${book.id}),
+                        {'id': ${book.id},
                          'title': '${book.title}',
                          'authName': '${book.author_name}',
                          'authSurname': '${book.author_surname}',
@@ -251,7 +313,7 @@ async function displayNotes(bookID) {
                     onclick="
                         event.stopPropagation();
                         showOverlay('note',
-                            {'id': parseInt(${note.id}),
+                            {'id': ${note.id},
                              'title': '${note.title}',
                              'pageNum': '${note.page_num}',
                              'body': '${note.body}'}
@@ -287,7 +349,7 @@ async function displayWikiEntry(wikiEntryID) {
                 onclick="
                     event.stopPropagation();
                     showOverlay('wikiEntry',
-                        {'id': parseInt(${wikiEntry.id}),
+                        {'id': ${wikiEntry.id},
                          'title': '${wikiEntry.title}',
                          'type': '${wikiEntry.entry_type}',
                          'body': '${wikiEntry.body}'}

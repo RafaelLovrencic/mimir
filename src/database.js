@@ -237,14 +237,15 @@ const queries = {
 
     'add-book': (title, authorName, authorSurname, yearPublished) => {
         return db.prepare('INSERT INTO book (title, author_name, author_surname, year_published) VALUES (?, ?, ?, ?)')
-          .run(title, authorName, authorSurname, yearPublished)
-          .lastInsertRowid;
+            .run(title, authorName, authorSurname, yearPublished)
+            .lastInsertRowid;
     },
     'add-note': addNote,
     'add-wiki-entry': addWikiEntry,
 
     'update-book': updateBook,
     'update-note': updateNote,
+    'update-wiki-entry': updateWikiEntry,
 };
 
 
