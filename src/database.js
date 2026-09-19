@@ -299,6 +299,19 @@ const queries = {
         `%${term}%`,
         `%${term}%`
     ),
+
+    'search-wiki-entries': (term) => db.prepare(`
+        SELECT *
+        FROM wiki_entry
+        WHERE
+            title LIKE ?
+            OR body LIKE ?
+            OR entry_type LIKE ?
+    `).all(
+        `%${term}`,
+        `%${term}`,
+        `%${term}`
+    ),
 };
 
 

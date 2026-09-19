@@ -345,13 +345,18 @@ async function displayNotes(bookID, notes) {
     });
 }
 
-async function displayWikiEntry(wikiEntryID) {
+function clearWiki() {
     const currentWikiEntry = document.querySelector('#wiki').querySelector('.wiki-entry');
-    try {
+
+    if (currentWikiEntry !== null)
         currentWikiEntry.remove();
-    } catch (err) {
-        console.log(err);
-    }
+
+    const wikiSearchResults = document.querySelector('#wiki').querySelectorAll('.wiki-search-result');
+    wikiSearchResults.forEach((searchResult) => searchResult.remove());
+}
+
+async function displayWikiEntry(wikiEntryID) {
+    clearWiki();
 
     const wikiArea = document.querySelector('#wiki');
     const wikiEntry = await window.dbAPI.execute('get-wiki-entry-by-id', parseInt(wikiEntryID));
@@ -379,6 +384,29 @@ async function displayWikiEntry(wikiEntryID) {
     
     wikiArea.appendChild(wikiDiv);
 
+}
+
+function displayWikiSearchResults(wikiEntries) {
+    clearWiki();
+
+    const wikiArea = document.querySelector('#wiki');
+
+    wikiEntries.forEach((wikiEntry) => {
+        var wikiDiv = document.createElement('div');
+        wikiDiv.className = 'wiki-search-result';
+        wikiDiv.id = `${wikiEntry.id}`;
+        wikiDiv.onclick = () => displayWikiEntry(wikiEntry.id);
+        
+        wikiDiv.innerHTML = `
+            <div class="entry-header">
+                <h3>${wikiEntry.title}</h3>
+            </div>
+            <p>${wikiEntry.body}</p>
+        `;
+        
+        wikiArea.appendChild(wikiDiv);
+    });
+    
 }
 
 function deleteItem(itemType, id) {
@@ -430,6 +458,7 @@ function clearSearch(searchArea) {
             break;
 
         case 'wiki':
+            clearWiki();
             
             break;
 
@@ -457,6 +486,8 @@ async function search(searchArea) {
             break;
 
         case 'wiki':
+            var wikiEntries = await window.dbAPI.execute('search-wiki-entries', searchTerm);
+            displayWikiSearchResults(wikiEntries);
             
             break;
 

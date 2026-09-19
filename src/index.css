@@ -393,6 +393,23 @@ input[type=text] {
     padding: 15px;
 }
 
+.wiki-search-result {
+    min-height: 10%; 
+    margin: 10px 10px 0px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; 
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    box-sizing: border-box;
+    padding: 10px;
+    cursor: pointer; 
+}
+
+.wiki-search-result:hover {
+    background-color: var(--gray-highlighted);
+}
+
 #overlay {
     position: fixed;
     display: none;
