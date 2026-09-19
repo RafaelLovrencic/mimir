@@ -261,7 +261,7 @@ async function submitBook(id = null) {
     const newBookID = await window.dbAPI.execute('add-book', title, authorName, authorSurname, year);
 
     hideOverlay();
-    displayBooks();
+    getAllBooks();
 }
 
 async function getAllBooks() {
