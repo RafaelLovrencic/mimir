@@ -33,8 +33,9 @@
                       <button class="action-button" onclick="showOverlay('book');">+</button>
                   </div>
                   <div class="search">
-                      <input type="text" id="search-term" class="search-input" placeholder="search">
-                      <button class="search-button"></button>
+                      <input type="text" class="search-input" placeholder="search">
+                      <button class="search-button" onclick="search('library')"></button>
+                      <button class="clear-button" onclick="clearSearch('library')"></button>
                   </div>
               </div>
           </aside>
@@ -49,8 +50,9 @@
                       <button class="action-button" onclick="showOverlay('note');">+</button>
                   </div>
                   <div class="search">
-                      <input type="text" id="search-term" class="search-input" placeholder="search">
-                      <button class="search-button"></button>
+                      <input type="text" class="search-input" placeholder="search">
+                      <button class="search-button" onclick="search('notes')"></button>
+                      <button class="clear-button" onclick="clearSearch('notes')"></button>
                   </div>
               </div>
           </section>
@@ -65,8 +67,9 @@
                       <button class="action-button" onclick="showOverlay('wikiEntry');">+</button>
                   </div>
                   <div class="search">
-                      <input type="text" id="search-term" class="search-input" placeholder="search">
-                      <button class="search-button"></button>
+                      <input type="text" class="search-input" placeholder="search">
+                      <button class="search-button" onclick="search('wiki')"></button>
+                      <button class="clear-button" onclick="clearSearch('wiki')"></button>
                   </div>
               </div>
           </section>

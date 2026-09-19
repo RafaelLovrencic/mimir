@@ -208,9 +208,7 @@ async function submitNote(id = null) {
     const newNoteID = await window.dbAPI.execute('add-note', parseInt(activeBookID), title, body, parseInt(pageNum));
 
     hideOverlay();
-    const existingNotes = document.querySelector('#notes').querySelectorAll('.note-entry');
-    existingNotes.forEach(note => note.remove());
-    displayNotes(activeBookID);
+    getAllNotes(activeBookID);
 }
 
 async function submitBook(id = null) {
@@ -263,20 +261,25 @@ async function submitBook(id = null) {
     const newBookID = await window.dbAPI.execute('add-book', title, authorName, authorSurname, year);
 
     hideOverlay();
-    const existingBooks = document.querySelector('#library').querySelectorAll('.book-entry');
-    existingBooks.forEach(book => book.remove());
     displayBooks();
 }
 
-async function displayBooks() {
+async function getAllBooks() {
     const library = document.querySelector('#library');
     const books = await window.dbAPI.execute('get-all-books');
+    
+    displayBooks(books);
+}
+
+function displayBooks(books) {
+    const existingBooks = document.querySelector('#library').querySelectorAll('.book-entry');
+    existingBooks.forEach(book => book.remove());
 
     books.forEach(book => {
         const bookDiv = document.createElement('div');
         bookDiv.className = 'book-entry';
         bookDiv.id = `${book.id}`;
-        bookDiv.onclick = () => displayNotes(bookDiv.id);
+        bookDiv.onclick = () => getAllNotes(bookDiv.id);
         
         bookDiv.innerHTML = `
             <h4>${book.title}</h4>
@@ -297,7 +300,12 @@ async function displayBooks() {
     });
 }
 
-async function displayNotes(bookID) {
+async function getAllNotes(bookID) {
+    const notes = await window.dbAPI.execute('get-notes-by-book', parseInt(bookID));
+    displayNotes(bookID, notes);
+}
+
+async function displayNotes(bookID, notes) {
     const existingNotes = document.querySelector('#notes').querySelectorAll('.note-entry');
     existingNotes.forEach(note => note.remove());
     activeBookID = bookID;
@@ -306,8 +314,6 @@ async function displayNotes(bookID) {
     const book = await window.dbAPI.execute('get-book-by-id', bookID);
     activeBookDisplay.textContent = `${book.author_name} ${book.author_surname}: ${book.title}, ${book.year_published}`;
 
-    const notes = await window.dbAPI.execute('get-notes-by-book', parseInt(bookID));
-    console.log(notes);
     notes.forEach(note => {
         const noteDiv = document.createElement('div');
         noteDiv.className = 'note-entry';
@@ -408,4 +414,65 @@ function deleteItem(itemType, id) {
     hideOverlay();
 }
 
-displayBooks();
+
+function clearSearch(searchArea) {
+    document.querySelector(`#${searchArea}`).querySelector(".search-input").value = '';
+
+    switch (searchArea) {
+        case 'library':
+            getAllBooks();
+            
+            break;
+
+        case 'notes':
+            getAllNotes(activeBookID);
+            
+            break;
+
+        case 'wiki':
+            
+            break;
+
+
+        default:
+            break;
+    }
+}
+
+async function search(searchArea) {
+
+    var searchTerm = document.querySelector(`#${searchArea}`).querySelector(".search-input").value;
+
+    switch (searchArea) {
+        case 'library':
+            var books = await window.dbAPI.execute('search-books', searchTerm);
+            displayBooks(books);
+            
+            break;
+
+        case 'notes':
+            var notes = await window.dbAPI.execute('search-notes', searchTerm, activeBookID);
+            displayNotes(activeBookID, notes);
+            
+            break;
+
+        case 'wiki':
+            
+            break;
+
+
+        default:
+            break;
+    }
+}
+
+getAllBooks();
+
+document.querySelectorAll('.search-input').forEach(input => {
+    input.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+            const searchArea = input.closest('section').id;
+            search(searchArea);
+        }
+    });
+});

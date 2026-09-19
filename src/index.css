@@ -280,6 +280,7 @@ input[type=text] {
 .search-button {
     width: 40px;
     height: 40px;
+    margin-right: 5px;
     border-radius: 10px;
     border: none;
     outline: none;
@@ -290,6 +291,22 @@ input[type=text] {
 }
 
 .search-button:hover {
+    filter: brightness(0.85);
+}
+
+.clear-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: orange;
+    font-family: "Arimo";
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.clear-button:hover {
     filter: brightness(0.85);
 }
 

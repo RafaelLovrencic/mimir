@@ -268,6 +268,37 @@ const queries = {
     'delete-book': deleteBook,
     'delete-note': (id) => db.prepare('DELETE FROM note WHERE id = ?').run(id),
     'delete-wiki-entry': (id) => db.prepare('DELETE FROM wiki_entry WHERE id = ?').run(id),
+
+    'search-books': (term) => db.prepare(`
+        SELECT *
+        FROM book
+        WHERE
+            title LIKE ?
+            OR author_name LIKE ?
+            OR author_surname LIKE ?
+            OR CAST(year_published AS TEXT) LIKE ?
+    `).all(
+        `%${term}%`,
+        `%${term}%`,
+        `%${term}%`,
+        `%${term}%`
+    ),
+
+    'search-notes': (term, bookID) => db.prepare(`
+        SELECT note.*
+        FROM note JOIN book_note
+        ON note.id = book_note.note_id 
+        WHERE
+            book_note.book_id = ? AND
+            (title LIKE ?
+            OR body LIKE ?
+            OR CAST(page_num AS TEXT) LIKE ?)
+    `).all(
+        bookID,
+        `%${term}%`,
+        `%${term}%`,
+        `%${term}%`
+    ),
 };
 
 
