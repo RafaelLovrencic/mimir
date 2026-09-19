@@ -406,6 +406,15 @@ input[type=text] {
     cursor: pointer; 
 }
 
+.wiki-search-result p {
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
 .wiki-search-result:hover {
     background-color: var(--gray-highlighted);
 }

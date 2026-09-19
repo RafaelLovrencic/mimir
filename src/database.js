@@ -308,9 +308,9 @@ const queries = {
             OR body LIKE ?
             OR entry_type LIKE ?
     `).all(
-        `%${term}`,
-        `%${term}`,
-        `%${term}`
+        `%${term}%`,
+        `%${term}%`,
+        `%${term}%`
     ),
 };
 
